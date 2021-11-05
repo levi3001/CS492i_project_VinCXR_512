@@ -41,9 +41,9 @@ class CocoDataset(Dataset):
 
         img = self.load_image(idx)
         annot = self.load_annotations(idx)
-        sample = {'img': img, 'annot': annot}
         if self.transform:
-            sample = self.transform(sample)
+            sample = self.transform(image=img,bboxes=annot)
+        sample['scale']=1
         return sample
 
     def load_image(self, image_index):
@@ -84,12 +84,11 @@ class CocoDataset(Dataset):
 
 
 def collater(data):
-    imgs = [s['img'] for s in data]
-    annots = [s['annot'] for s in data]
+    imgs = [s['image'] for s in data]
+    annots = [s['bboxes'] for s in data]
     scales = [s['scale'] for s in data]
-
     imgs = torch.from_numpy(np.stack(imgs, axis=0))
-
+    annots=[torch.from_numpy(np.array(annot)) for annot in annots]
     max_num_annots = max(annot.shape[0] for annot in annots)
 
     if max_num_annots > 0:
@@ -102,7 +101,7 @@ def collater(data):
     else:
         annot_padded = torch.ones((len(annots), 1, 5)) * -1
 
-    imgs = imgs.permute(0, 3, 1, 2)
+    #imgs = imgs.permute(0, 3, 1, 2)
 
     return {'img': imgs, 'annot': annot_padded, 'scale': scales}
 

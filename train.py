@@ -22,7 +22,9 @@ from efficientdet.loss import FocalLoss
 from utils.sync_batchnorm import patch_replication_callback
 from utils.utils import replace_w_sync_bn, CustomDataParallel, get_last_weights, init_weights, boolean_string
 
-
+import albumentations
+from albumentations import Compose, HorizontalFlip, Normalize, VerticalFlip, Rotate, Resize, ShiftScaleRotate,RandomBrightnessContrast
+from albumentations.pytorch import ToTensorV2
 class Params:
     def __init__(self, project_file):
         self.params = yaml.safe_load(open(project_file).read())
@@ -110,15 +112,29 @@ def train(opt):
                   'num_workers': opt.num_workers}
 
     input_sizes = [512, 640, 768, 896, 1024, 1280, 1280, 1536, 1536]
+
+    data_transform= {
+        'train': Compose([
+            Resize(512,512),
+            HorizontalFlip(),
+            ShiftScaleRotate(rotate_limit=10),  
+            RandomBrightnessContrast(),
+            Resize(512,512),
+            ToTensorV2()
+        ], bbox_params=albumentations.BboxParams(format='pascal_voc')),
+        'val': Compose([
+            Resize(512,512),
+            ToTensorV2()
+        ],albumentations.BboxParams(format='pascal_voc'))
+    }
+
+
     training_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.train_set,
-                               transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std),
-                                                             Augmenter(),
-                                                             Resizer(input_sizes[opt.compound_coef])]))
+                               transform=data_transform['train'])
     training_generator = DataLoader(training_set, **training_params)
 
     val_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.val_set,
-                          transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std),
-                                                        Resizer(input_sizes[opt.compound_coef])]))
+                          transform=data_transform['val'])
     val_generator = DataLoader(val_set, **val_params)
 
     model = EfficientDetBackbone(num_classes=len(params.obj_list), compound_coef=opt.compound_coef,
