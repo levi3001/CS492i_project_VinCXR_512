@@ -117,13 +117,14 @@ def train(opt):
         'train': Compose([
             Resize(512,512),
             HorizontalFlip(),
-            ShiftScaleRotate(rotate_limit=10),  
-            RandomBrightnessContrast(),
-            Resize(512,512),
+            #ShiftScaleRotate(rotate_limit=10),  
+            #RandomBrightnessContrast(),
+            Normalize(),
             ToTensorV2()
         ], bbox_params=albumentations.BboxParams(format='pascal_voc')),
         'val': Compose([
             Resize(512,512),
+            Normalize(),
             ToTensorV2()
         ],albumentations.BboxParams(format='pascal_voc'))
     }
