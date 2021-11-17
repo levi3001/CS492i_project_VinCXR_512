@@ -23,7 +23,9 @@ from utils.sync_batchnorm import patch_replication_callback
 from utils.utils import replace_w_sync_bn, CustomDataParallel, get_last_weights, init_weights, boolean_string
 
 import albumentations
-from albumentations import Compose, HorizontalFlip, Normalize, VerticalFlip, Rotate, Resize, ShiftScaleRotate,RandomBrightnessContrast
+from albumentations import Compose, HorizontalFlip, Normalize, VerticalFlip, Rotate, Resize, ShiftScaleRotate, \
+RandomBrightnessContrast, RandomResizedCrop
+
 from albumentations.pytorch import ToTensorV2
 class Params:
     def __init__(self, project_file):
@@ -117,6 +119,7 @@ def train(opt):
         'train': Compose([
             Resize(512,512),
             HorizontalFlip(),
+            RandomResizedCrop(512,512,p=0.5),
             ShiftScaleRotate(rotate_limit=10),  
             RandomBrightnessContrast(),
             Normalize(max_pixel_value=1),
