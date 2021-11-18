@@ -279,7 +279,7 @@ def train(opt):
                     print('[Error]', traceback.format_exc())
                     print(e)
                     continue
-            scheduler.step(np.mean(epoch_loss))
+            scheduler.step()
 
             if epoch % opt.val_interval == 0:
                 model.eval()
