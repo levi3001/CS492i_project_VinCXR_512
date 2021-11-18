@@ -210,7 +210,7 @@ def train(opt):
     else:
         optimizer = torch.optim.SGD(model.parameters(), opt.lr, momentum=0.9, nesterov=True)
 
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 100, gamma=0.1, last_epoch=- 1, verbose=False)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100, eta_min=1e-4, last_epoch=- 1, verbose=False)
 
     epoch = 0
     best_loss = 1e5
@@ -256,17 +256,17 @@ def train(opt):
                     optimizer.step()
 
                     epoch_loss.append(float(loss))
-
+                    current_lr = optimizer.param_groups[0]['lr']
                     progress_bar.set_description(
-                        'Step: {}. Epoch: {}/{}. Iteration: {}/{}. Cls loss: {:.5f}. Reg loss: {:.5f}. Total loss: {:.5f}'.format(
-                            step, epoch, opt.num_epochs, iter + 1, num_iter_per_epoch, cls_loss.item(),
+                        'Step: {}. lr{} Epoch: {}/{}. Iteration: {}/{}. Cls loss: {:.5f}. Reg loss: {:.5f}. Total loss: {:.5f}'.format(
+                            step, current_lr, epoch, opt.num_epochs, iter + 1, num_iter_per_epoch, cls_loss.item(),
                             reg_loss.item(), loss.item()))
                     writer.add_scalars('Loss', {'train': loss}, step)
                     writer.add_scalars('Regression_loss', {'train': reg_loss}, step)
                     writer.add_scalars('Classfication_loss', {'train': cls_loss}, step)
 
                     # log learning_rate
-                    current_lr = optimizer.param_groups[0]['lr']
+                    
                     writer.add_scalar('learning_rate', current_lr, step)
 
                     step += 1
