@@ -63,7 +63,7 @@ def get_args():
     parser.add_argument('--debug', type=boolean_string, default=False,
                         help='whether visualize the predicted boxes of training, '
                              'the output images will be in test/')
-
+    parser.add_argument('--load_custom_backbone', type=str, default=None)
     args = parser.parse_args()
     return args
 
@@ -141,7 +141,7 @@ def train(opt):
                           transform=data_transform['val'])
     val_generator = DataLoader(val_set, **val_params)
 
-    model = EfficientDetBackbone(num_classes=len(params.obj_list), compound_coef=opt.compound_coef,
+    model = EfficientDetBackbone(num_classes=len(params.obj_list), compound_coef=opt.compound_coef, custom_backbone= opt.custom_backbone,
                                  ratios=eval(params.anchors_ratios), scales=eval(params.anchors_scales))
 
     # load last weights

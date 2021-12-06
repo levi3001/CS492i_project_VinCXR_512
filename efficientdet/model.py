@@ -422,9 +422,11 @@ class EfficientNet(nn.Module):
     modified by Zylo117
     """
 
-    def __init__(self, compound_coef, load_weights=False):
+    def __init__(self, compound_coef, load_weights=False,custom_backbone=None):
         super(EfficientNet, self).__init__()
         model = EffNet.from_pretrained(f'efficientnet-b{compound_coef}', load_weights)
+        if custom_backbone is not None:
+            model.load_state_dict(torch.load(custom_backbone))
         del model._conv_head
         del model._bn1
         del model._avg_pooling
