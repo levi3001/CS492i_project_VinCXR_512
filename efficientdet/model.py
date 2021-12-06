@@ -422,7 +422,7 @@ class EfficientNet(nn.Module):
     modified by Zylo117
     """
 
-    def __init__(self, compound_coef, load_weights=False,custom_backbone=None, num_classes):
+    def __init__(self, compound_coef,num_classes, load_weights=False,custom_backbone=None):
         super(EfficientNet, self).__init__()
         model = EffNet.from_pretrained(f'efficientnet-b{compound_coef}', load_weights,num_classes=num_classes)
         if custom_backbone is not None:
