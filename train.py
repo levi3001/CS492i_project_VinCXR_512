@@ -63,7 +63,7 @@ def get_args():
     parser.add_argument('--debug', type=boolean_string, default=False,
                         help='whether visualize the predicted boxes of training, '
                              'the output images will be in test/')
-    parser.add_argument('--load_custom_backbone', type=str, default=None)
+    parser.add_argument('--custom_backbone', type=str, default=None)
     args = parser.parse_args()
     return args
 
