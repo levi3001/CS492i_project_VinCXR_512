@@ -8,7 +8,7 @@ from efficientdet.utils import Anchors
 
 
 class EfficientDetBackbone(nn.Module):
-    def __init__(self, num_classes=80, compound_coef=0, load_weights=False, custom_backbone=None,**kwargs):
+    def __init__(self, num_classes=80, compound_coef_backbone=0, compound_coef=0, load_weights=False, custom_backbone=None,**kwargs):
         super(EfficientDetBackbone, self).__init__()
         self.compound_coef = compound_coef
 
@@ -57,7 +57,7 @@ class EfficientDetBackbone(nn.Module):
                                pyramid_levels=(torch.arange(self.pyramid_levels[self.compound_coef]) + 3).tolist(),
                                **kwargs)
 
-        self.backbone_net = EfficientNet(self.backbone_compound_coef[compound_coef],num_classes, load_weights,custom_backbone)
+        self.backbone_net = EfficientNet(self.backbone_compound_coef[compound_coef_backbone],num_classes, load_weights,custom_backbone)
 
     def freeze_bn(self):
         for m in self.modules():
