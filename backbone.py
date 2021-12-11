@@ -38,7 +38,7 @@ class EfficientDetBackbone(nn.Module):
 
         self.bifpn = nn.Sequential(
             *[BiFPN(self.fpn_num_filters[self.compound_coef],
-                    conv_channel_coef=compound_coef_backbone,
+                    conv_channel_coef[compound_coef_backbone],
                     True if _ == 0 else False,
                     attention=True if compound_coef < 6 else False,
                     use_p8=compound_coef > 7)
