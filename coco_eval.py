@@ -33,6 +33,8 @@ ap.add_argument('--cuda', type=boolean_string, default=True)
 ap.add_argument('--device', type=int, default=0)
 ap.add_argument('--float16', type=boolean_string, default=False)
 ap.add_argument('--override', type=boolean_string, default=True, help='override previous bbox results file if exists')
+
+ap.add_argument('-cb', '--compound_coef_backbone', type=int, default=0, help='coefficients of efficientdet')
 args = ap.parse_args()
 
 compound_coef = args.compound_coef
@@ -44,6 +46,7 @@ override_prev_results = args.override
 project_name = args.project
 weights_path = f'weights/efficientdet-d{compound_coef}.pth' if args.weights is None else args.weights
 
+compound_coef_backbone = args.compound_coef_backbone
 print(f'running coco-style evaluation on project {project_name}, weights {weights_path}...')
 
 params = yaml.safe_load(open(f'projects/{project_name}.yml'))
@@ -144,7 +147,7 @@ if __name__ == '__main__':
     image_ids = coco_gt.getImgIds()[:MAX_IMAGES]
     
     if override_prev_results or not os.path.exists(f'{SET_NAME}_bbox_results.json'):
-        model = EfficientDetBackbone(compound_coef=compound_coef, num_classes=len(obj_list),
+        model = EfficientDetBackbone(compound_coef_backbone=compound_coef_backbone ,compound_coef=compound_coef, num_classes=len(obj_list),
                                      ratios=eval(params['anchors_ratios']), scales=eval(params['anchors_scales']))
         model.load_state_dict(torch.load(weights_path, map_location=torch.device('cpu')))
         model.requires_grad_(False)
