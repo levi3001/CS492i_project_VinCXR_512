@@ -24,9 +24,10 @@ Train efficientdet b0 from pretrained efficientdet b0: \
 To train efficientnet detector, execute the file vin_CXR_512_classifier.ipynb\
 The file utilizes the same dataset as above.\
 The overall structure is as following:\
-1. Install necessary packages\
-2. Build Data Loader\
-3. Define loss function\
-4. Train models and Evaluation\
-5. Some statistics for models evaluation\
+1. Install necessary packages
+2. Build Data Loader
+3. Define loss function
+4. Train models and Evaluation
+5. Some statistics for models evaluation
+\
 Those help us obtain the backbone structure of the model, with several different structures: Resnet50, EfficientNet. Overall, we choose the efficientnet.\
