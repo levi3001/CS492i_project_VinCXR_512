@@ -17,20 +17,20 @@ In this project we try to use efficiendet to detect the abnormality in CXR image
 2. To run upsample.ipynb and vin_CXR_512.ipynb you need to download file test_meta.csv and vin_CXR_512 from https://www.kaggle.com/corochann/vinbigdata-testmeta and https://www.kaggle.com/xhlulu/vinbigdata and store it in your drive as gdrive/MyDrive/cs492i_project/test_meta.csv and gdrive/MyDrive/cs492i_project/vin_CXR_512 
 3. Some useful comma:
     - Train efficientdet b0 with custom pretrained model:\
-        python train.py -c 0 -cb 0 -p Vin_CXR_512 --batch_size 16 --lr 1e-3 --num_epochs 10 --custom_backbone /content/gdrive/MyDrive/cs492i_project/efficientnet_b0_best.pth --head_only True \
+        python train.py -c 0 -cb 0 -p Vin_CXR_512 --batch_size 16 --lr 1e-3 --num_epochs 10 --custom_backbone /content/gdrive/MyDrive/cs492i_project/efficientnet_b0_best.pth --head_only True 
     - Train efficientdet b0 with efficientnet b3 backbone:\
-        python train.py -c 0 -cb 3 -p Vin_CXR_512 --batch_size 16 --lr 1e-3 --num_epochs 10 --custom_backbone /content/gdrive/MyDrive/cs492i_project/efficientnet_b3_best_2.pth --head_only True \
+        python train.py -c 0 -cb 3 -p Vin_CXR_512 --batch_size 16 --lr 1e-3 --num_epochs 10 --custom_backbone /content/gdrive/MyDrive/cs492i_project/efficientnet_b3_best_2.pth --head_only True 
     - Train efficientdet b0 from pretrained efficientdet b0: \
         python train.py -c 0 -cb 0 -p Vin_CXR_512 --batch_size 16 --lr 1e-3 --num_epochs 50 --load_weights path/to/your/efficientdet/b0/weight
 
-To train efficientnet classifier, execute the file vin_CXR_512_classifier.ipynb\
-The file utilizes the same dataset as above.\
-The overall structure is as following:
-1. Install necessary packages
-2. Build Data Loader
-3. Define loss function
-4. Train models and Evaluation
-5. Some statistics for models evaluation
+4. To train efficientnet classifier, execute the file vin_CXR_512_classifier.ipynb
+    - The file utilizes the same dataset as above.
+    - The overall structure is as following:
+        1. Install necessary packages
+        2. Build Data Loader
+        3. Define loss function
+        4. Train models and Evaluation
+        5. Some statistics for models evaluation
 
 
 Those help us obtain the backbone structure of the model, with several different structures: Resnet50, EfficientNet. Overall, we choose the efficientnet.
